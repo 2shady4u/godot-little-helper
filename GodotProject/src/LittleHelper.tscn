@@ -1,12 +1,16 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://graphics/mouth.png" type="Texture" id=1]
 [ext_resource path="res://graphics/background.png" type="Texture" id=2]
-[ext_resource path="res://audio/quack.wav" type="AudioStream" id=3]
+[ext_resource path="res://audio/quack_variant_2.wav" type="AudioStream" id=3]
 [ext_resource path="res://graphics/eyes_open.png" type="Texture" id=4]
 [ext_resource path="res://src/LittleHelper.gd" type="Script" id=5]
 [ext_resource path="res://src/HelperButton.gd" type="Script" id=6]
 [ext_resource path="res://graphics/eyes_closed.png" type="Texture" id=7]
+[ext_resource path="res://graphics/head.png" type="Texture" id=8]
+[ext_resource path="res://src/InteractionPanel.gd" type="Script" id=9]
+[ext_resource path="res://graphics/sleep_particle.png" type="Texture" id=10]
+[ext_resource path="res://resources/message_style.tres" type="StyleBox" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 1 )
@@ -16,20 +20,52 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color( 0, 0, 0, 1 )
 border_blend = true
-corner_radius_top_left = 90
-corner_radius_top_right = 90
-corner_radius_bottom_right = 90
-corner_radius_bottom_left = 90
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_left = 12.0
+expand_margin_right = 12.0
+expand_margin_top = 12.0
+expand_margin_bottom = 12.0
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="StyleBoxLine" id=2]
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 0 ), 0.0, 1.07778, 0, 0, Vector2( 1, 1 ), 1.00098, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+flag_disable_z = true
+direction = Vector3( 0, -1, 0 )
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 10.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.25
+scale_curve = SubResource( 5 )
+
+[sub_resource type="SpriteFrames" id=7]
 animations = [ {
 "frames": [ ExtResource( 4 ), ExtResource( 7 ), ExtResource( 4 ) ],
 "loop": false,
 "name": "blink",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": false,
+"name": "sleep",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": false,
+"name": "awake",
+"speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=8]
 length = 2.0
 loop = true
 tracks/0/type = "value"
@@ -67,21 +103,229 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 384.0
-margin_top = 245.0
-margin_right = 640.0
-margin_bottom = 355.0
-rect_min_size = Vector2( 256, 110 )
+margin_top = -300.0
+margin_right = 1024.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 1024, 600 )
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MessageLabel" type="Label" parent="VBoxContainer"]
-margin_left = 46.0
-margin_right = 209.0
-margin_bottom = 24.0
+[node name="InteractionPanel" type="PanelContainer" parent="VBoxContainer"]
+margin_left = 349.0
+margin_top = 451.0
+margin_right = 674.0
+margin_bottom = 486.0
+size_flags_horizontal = 4
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 9 )
+
+[node name="PomodorePause" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 322.0
+margin_bottom = 51.0
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/PomodorePause"]
+margin_right = 320.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Take a break!!!
+Current break time is 4 minutes 3 seconds"
+align = 1
+
+[node name="LinkButton" type="LinkButton" parent="VBoxContainer/InteractionPanel/PomodorePause"]
+margin_left = 139.0
+margin_top = 35.0
+margin_right = 181.0
+margin_bottom = 49.0
+size_flags_horizontal = 4
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0.196078, 0.196078, 0.196078, 1 )
+custom_colors/font_color_pressed = Color( 0.196078, 0.196078, 0.196078, 1 )
+text = "Cancel"
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PomodoreWork" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 323.0
+margin_bottom = 51.0
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/PomodoreWork"]
+margin_right = 321.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Currently there's 5 minutes 23 seconds remaining
+until your break!"
+align = 1
+
+[node name="LinkButton" type="LinkButton" parent="VBoxContainer/InteractionPanel/PomodoreWork"]
+margin_left = 139.0
+margin_top = 35.0
+margin_right = 181.0
+margin_bottom = 49.0
+size_flags_horizontal = 4
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0.196078, 0.196078, 0.196078, 1 )
+custom_colors/font_color_pressed = Color( 0.196078, 0.196078, 0.196078, 1 )
+text = "Cancel"
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PomodoreStart" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 323.0
+margin_bottom = 33.0
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/PomodoreStart"]
+margin_right = 321.0
+margin_bottom = 31.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "A Pomodore cycle of 25 minutes has started...
+I will hide now and warn you when to take a break!"
+align = 1
+
+[node name="QuackCount" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 323.0
+margin_bottom = 33.0
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/QuackCount"]
+margin_right = 321.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "You have QuAcKeD me 10 times!"
+align = 1
+
+[node name="QuitHelper" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 247.0
+margin_bottom = 16.0
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/QuitHelper"]
+margin_right = 245.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "I'll always be here when you need me!"
+align = 1
+
+[node name="OptionContainer" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 318.0
+margin_bottom = 78.0
+size_flags_horizontal = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/OptionContainer"]
+margin_left = 59.0
+margin_right = 256.0
+margin_bottom = 14.0
+size_flags_horizontal = 4
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "What would you like me to do?"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/InteractionPanel/OptionContainer"]
+margin_top = 18.0
+margin_right = 316.0
+margin_bottom = 22.0
+custom_styles/separator = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Options" type="VBoxContainer" parent="VBoxContainer/InteractionPanel/OptionContainer"]
+margin_top = 26.0
+margin_right = 316.0
+margin_bottom = 76.0
+size_flags_horizontal = 4
+
+[node name="PomodoreLink" type="LinkButton" parent="VBoxContainer/InteractionPanel/OptionContainer/Options"]
+margin_right = 206.0
+margin_bottom = 14.0
+size_flags_horizontal = 0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0.196078, 0.196078, 0.196078, 1 )
+custom_colors/font_color_pressed = Color( 0.196078, 0.196078, 0.196078, 1 )
+text = "- Please start a Pomodore cycle!"
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CountLink" type="LinkButton" parent="VBoxContainer/InteractionPanel/OptionContainer/Options"]
+margin_top = 18.0
+margin_right = 213.0
+margin_bottom = 32.0
+size_flags_horizontal = 0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0.196078, 0.196078, 0.196078, 1 )
+custom_colors/font_color_pressed = Color( 0.196078, 0.196078, 0.196078, 1 )
+text = "- How high is my QuAcK counter?"
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="QuitLink" type="LinkButton" parent="VBoxContainer/InteractionPanel/OptionContainer/Options"]
+margin_top = 36.0
+margin_right = 316.0
+margin_bottom = 50.0
+size_flags_horizontal = 0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_colors/font_color_hover = Color( 0.196078, 0.196078, 0.196078, 1 )
+custom_colors/font_color_pressed = Color( 0.196078, 0.196078, 0.196078, 1 )
+text = "- I can go on alone now, you've been a great help!"
+underline = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FadeTimer" type="Timer" parent="VBoxContainer/InteractionPanel"]
+one_shot = true
+
+[node name="PomodoreTimer" type="Timer" parent="VBoxContainer/InteractionPanel"]
+one_shot = true
+
+[node name="Control" type="VBoxContainer" parent="VBoxContainer"]
+margin_left = 428.0
+margin_top = 490.0
+margin_right = 595.0
+margin_bottom = 514.0
 rect_min_size = Vector2( 0, 24 )
+size_flags_horizontal = 4
+
+[node name="MessagePanel" type="PanelContainer" parent="VBoxContainer/Control"]
+show_behind_parent = true
+margin_right = 167.0
+margin_bottom = 18.0
+custom_styles/panel = ExtResource( 11 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MessageLabel" type="Label" parent="VBoxContainer/Control/MessagePanel"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 165.0
+margin_bottom = 16.0
 size_flags_horizontal = 4
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Tell me everything! :)       "
@@ -91,20 +335,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/MessageLabel"]
-show_behind_parent = true
-anchor_right = 1.0
-anchor_bottom = 1.0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="HelperButton" type="TextureButton" parent="VBoxContainer"]
-margin_left = 96.0
-margin_top = 28.0
-margin_right = 160.0
-margin_bottom = 92.0
+margin_left = 480.0
+margin_top = 518.0
+margin_right = 544.0
+margin_bottom = 582.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture_normal = ExtResource( 2 )
@@ -113,29 +348,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="SleepParticles" type="Particles2D" parent="VBoxContainer/HelperButton"]
+position = Vector2( 32, 32 )
+emitting = false
+amount = 32
+lifetime = 10.0
+process_material = SubResource( 6 )
+texture = ExtResource( 10 )
+
 [node name="Mouth" type="Sprite" parent="VBoxContainer/HelperButton"]
 position = Vector2( 32, 48 )
 texture = ExtResource( 1 )
 offset = Vector2( 0, -16 )
 
 [node name="Head" type="Sprite" parent="VBoxContainer/HelperButton"]
+texture = ExtResource( 8 )
+centered = false
 
 [node name="Eyes" type="AnimatedSprite" parent="VBoxContainer/HelperButton"]
-frames = SubResource( 2 )
-animation = "blink"
+frames = SubResource( 7 )
+animation = "sleep"
 centered = false
 
 [node name="Animations" type="Node2D" parent="VBoxContainer/HelperButton"]
 
 [node name="MouthAP" type="AnimationPlayer" parent="VBoxContainer/HelperButton/Animations"]
-autoplay = "wiggle_mouth"
-anims/wiggle_mouth = SubResource( 3 )
+anims/wiggle_mouth = SubResource( 8 )
 
 [node name="NameLabel" type="Label" parent="VBoxContainer"]
-margin_left = 70.0
-margin_top = 96.0
-margin_right = 186.0
-margin_bottom = 110.0
+margin_left = 454.0
+margin_top = 586.0
+margin_right = 570.0
+margin_bottom = 600.0
 size_flags_horizontal = 4
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 text = "Faithful Lil' Helper"

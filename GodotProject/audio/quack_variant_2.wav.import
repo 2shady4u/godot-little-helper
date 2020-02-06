@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/quack.wav-c26d7a831f0c77b178e9f326106bad32.sample"
+path="res://.import/quack_variant_2.wav-7469f4cd9663a71fceaf4fa60270b06e.sample"
 
 [deps]
 
-source_file="res://audio/quack.wav"
-dest_files=[ "res://.import/quack.wav-c26d7a831f0c77b178e9f326106bad32.sample" ]
+source_file="res://audio/quack_variant_2.wav"
+dest_files=[ "res://.import/quack_variant_2.wav-7469f4cd9663a71fceaf4fa60270b06e.sample" ]
 
 [params]
 

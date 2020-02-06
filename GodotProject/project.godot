@@ -19,6 +19,11 @@ config/name="Little Helper"
 run/main_scene="res://src/LittleHelper.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Flow="*res://src/autoload/Flow.tscn"
+State="*res://src/autoload/State.tscn"
+
 [display]
 
 window/size/resizable=false
@@ -35,6 +40,11 @@ window/stretch/aspect="keep_height"
 LMB={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+RMB={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 
