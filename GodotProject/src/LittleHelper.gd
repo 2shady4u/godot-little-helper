@@ -64,6 +64,7 @@ onready var _mouth_animation_player : AnimationPlayer = _animations.get_node("Mo
 func _ready():
 	randomize()
 	_message_panel.visible = false
+	_on_state_changed()
 	
 	OS.window_per_pixel_transparency_enabled = true
 	get_tree().get_root().set_transparent_background(true)
@@ -74,6 +75,8 @@ func _ready():
 	_message_timer.connect("timeout", self, "_on_message_timer_timeout")
 # warning-ignore:return_value_discarded
 	_blink_timer.connect("timeout", self, "_on_blink_timer_timeout")
+# warning-ignore:return_value_discarded
+	_interaction_panel.connect("state_changed", self, "_on_state_changed")
 
 	if can_show_message:
 		_message_timer.wait_time = rand_range(MIN_MESSAGE_TIMEOUT, MAX_MESSAGE_TIMEOUT)
@@ -108,10 +111,6 @@ func _process(_delta : float):
 	if _is_mouse_right_pressed and _helper_button.is_mouse_inside:
 		_is_mouse_right_pressed = false
 		_interaction_panel.toggle_visibility()
-	
-	if State.has_state_been_updated:
-		State.has_state_been_updated = false
-		update_state_conditions()
 
 func set_can_blink(new_value : bool):
 	can_blink = new_value
@@ -135,7 +134,7 @@ func _on_button_pressed():
 		_audio_stream_player.playing = true
 		State.quack_count += 1
 
-func update_state_conditions():
+func _on_state_changed():
 	match State.current_state:
 		State.INTERACTION_STATE.POMODORE_TRANSITION:
 			set_can_blink(false)

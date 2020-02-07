@@ -6,11 +6,10 @@ enum STATE_VARIABLE {QUACK_COUNT, POMODORE_TIME_REMAINING}
 var quack_count : int = 0 setget set_quack_counter
 var pomodore_time_remaining : float = 0 setget set_pomodore_time_remaining
 var pomodore_work_time : float = 25
-var pomodore_pause_time : float = 25
+var pomodore_pause_time : float = 5
 
 var is_currently_working : bool = true
 var is_in_pomodore : bool = false
-var has_state_been_updated : bool = true
 var current_state : int = INTERACTION_STATE.IDLE
 
 signal quack_count_changed

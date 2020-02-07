@@ -30,6 +30,8 @@ const FADE_TIME : float = 2.0
 
 enum LINK_TYPE {POMODORE, COUNT, QUIT, CANCEL}
 
+signal state_changed
+
 func _ready():
 	visible = false
 	hide_all()
@@ -58,6 +60,8 @@ func _ready():
 	State.connect("pomodore_work_time_changed", self, "update_state_variable", [State.STATE_VARIABLE.POMODORE_TIME_REMAINING])
 # warning-ignore:return_value_discarded
 	State.connect("pomodore_pause_time_changed", self, "update_state_variable", [State.STATE_VARIABLE.POMODORE_TIME_REMAINING])
+
+	State.quack_count = 0
 
 # warning-ignore:return_value_discarded
 	_fade_timer.connect("timeout", self, "on_fade_timer_timeout")
@@ -108,7 +112,7 @@ func _on_link_button_pressed(link_type : int):
 func update_state_conditions():
 	hide_all()
 	print("updating state")
-	State.has_state_been_updated = true
+	emit_signal("state_changed")
 	match State.current_state:
 		State.INTERACTION_STATE.POMODORE_TRANSITION:
 			_pomodore_start.visible = true
@@ -161,4 +165,7 @@ func update_state_variable(variable_name : int):
 				_work_time_label.text += "until your break!"
 
 func get_minutes_and_seconds(time : float):
-	return [floor(time/60), floor(int(ceil(time)) % 60)]
+	var integer_time : int = int(ceil(time))
+	var minutes : int = floor(integer_time/60)
+	var seconds : int = integer_time - minutes*60
+	return [minutes, seconds]

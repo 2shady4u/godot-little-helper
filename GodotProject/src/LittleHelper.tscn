@@ -31,13 +31,13 @@ expand_margin_bottom = 12.0
 
 [sub_resource type="StyleBoxLine" id=2]
 
-[sub_resource type="Curve" id=4]
+[sub_resource type="Curve" id=3]
 _data = [ Vector2( 0, 0 ), 0.0, 1.07778, 0, 0, Vector2( 1, 1 ), 1.00098, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=5]
-curve = SubResource( 4 )
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=6]
+[sub_resource type="ParticlesMaterial" id=5]
 flag_disable_z = true
 direction = Vector3( 0, -1, 0 )
 gravity = Vector3( 0, 0, 0 )
@@ -45,9 +45,9 @@ initial_velocity = 10.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 0.25
-scale_curve = SubResource( 5 )
+scale_curve = SubResource( 4 )
 
-[sub_resource type="SpriteFrames" id=7]
+[sub_resource type="SpriteFrames" id=6]
 animations = [ {
 "frames": [ ExtResource( 4 ), ExtResource( 7 ), ExtResource( 4 ) ],
 "loop": false,
@@ -65,7 +65,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=7]
 length = 2.0
 loop = true
 tracks/0/type = "value"
@@ -113,9 +113,9 @@ __meta__ = {
 }
 
 [node name="InteractionPanel" type="PanelContainer" parent="VBoxContainer"]
-margin_left = 349.0
-margin_top = 451.0
-margin_right = 674.0
+margin_left = 404.0
+margin_top = 468.0
+margin_right = 620.0
 margin_bottom = 486.0
 size_flags_horizontal = 4
 custom_styles/panel = SubResource( 1 )
@@ -182,6 +182,7 @@ __meta__ = {
 }
 
 [node name="PomodoreStart" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
+visible = false
 margin_left = 2.0
 margin_top = 2.0
 margin_right = 323.0
@@ -196,14 +197,13 @@ I will hide now and warn you when to take a break!"
 align = 1
 
 [node name="QuackCount" type="VBoxContainer" parent="VBoxContainer/InteractionPanel"]
-visible = false
 margin_left = 2.0
 margin_top = 2.0
-margin_right = 323.0
-margin_bottom = 33.0
+margin_right = 214.0
+margin_bottom = 16.0
 
 [node name="Label" type="Label" parent="VBoxContainer/InteractionPanel/QuackCount"]
-margin_right = 321.0
+margin_right = 212.0
 margin_bottom = 14.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "You have QuAcKeD me 10 times!"
@@ -353,7 +353,7 @@ position = Vector2( 32, 32 )
 emitting = false
 amount = 32
 lifetime = 10.0
-process_material = SubResource( 6 )
+process_material = SubResource( 5 )
 texture = ExtResource( 10 )
 
 [node name="Mouth" type="Sprite" parent="VBoxContainer/HelperButton"]
@@ -366,14 +366,14 @@ texture = ExtResource( 8 )
 centered = false
 
 [node name="Eyes" type="AnimatedSprite" parent="VBoxContainer/HelperButton"]
-frames = SubResource( 7 )
+frames = SubResource( 6 )
 animation = "sleep"
 centered = false
 
 [node name="Animations" type="Node2D" parent="VBoxContainer/HelperButton"]
 
 [node name="MouthAP" type="AnimationPlayer" parent="VBoxContainer/HelperButton/Animations"]
-anims/wiggle_mouth = SubResource( 8 )
+anims/wiggle_mouth = SubResource( 7 )
 
 [node name="NameLabel" type="Label" parent="VBoxContainer"]
 margin_left = 454.0
